@@ -957,9 +957,20 @@ console.log("Plotly =", typeof Plotly);
     return chain;
   }
 
-  function zoomTo(node) {
-    Plotly.restyle(chartEl, { level: [node] }, [0]);
-  }
+function zoomTo(node) {
+    Plotly.animate(
+        chartEl,
+        {
+            data: [{ level: node }]
+        },
+        {
+            transition: {
+                duration: 600,
+                easing: 'cubic-in-out'
+            }
+        }
+    );
+}
 
   function renderBreadcrumb(label) {
     const chain = getAncestors(label);
