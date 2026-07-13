@@ -53,11 +53,12 @@
     font-family: var(--font-body);
   }
 
-  body {
+body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-  }
+    padding-bottom: 60px;
+}
 
   a { color: var(--accent); }
 
@@ -486,18 +487,28 @@
   /* ---------- Footer ---------- */
 
 .site-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
     flex-wrap: wrap;
+
     padding: 14px 24px;
     background: var(--surface);
     border-top: 1px solid var(--border);
+
     font-size: 12px;
     color: var(--text-faint);
     font-family: var(--font-mono);
+
+    z-index: 1000;
 }
+
 
   .site-footer .version {
     color: var(--accent);
