@@ -856,22 +856,23 @@ const summaries = {
     return domainOf[label] || "AI Workflow";
   }
 
-function wrapLabel(text) {
+function wrapLabel(text, maxChars = 14) {
+    const words = text.split(' ');
+    const lines = [];
+    let current = '';
 
-    if (text.includes(" & ")) {
-        return text.replace(" & ", "\n& ");
-    }
-
-    if (text.includes(" and ")) {
-        return text.replace(" and ", "\nand ");
-    }
-
-    return text;
-}
+    words.forEach(word => {
+        if ((current + ' ' + word).trim().length > maxChars) {
+            if (current) lines.push(current);
+            current = word;
+        } else {
+            current += (current ? ' ' : '') + word;
+        }
+    });
 
     if (current) lines.push(current);
 
-    return lines.join('<br/>');
+    return text;
 }     
   const colors = labels.map(l => domainColor[getDomain(l)] || "#8B96A5");
   const displayLabels = labels.map(wrapLabel);
