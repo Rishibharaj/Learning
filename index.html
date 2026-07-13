@@ -850,7 +850,7 @@ function wrapLabel(text, maxChars = 15) {
 
   const chartData = [{
     type: 'sunburst',
-    labels: labels.map(label => wrapLabel(label)),
+    labels: labels,
     parents: parents,
     hovertext: labels.map(l => summaries[l] || ''),
     hoverinfo: 'text',
