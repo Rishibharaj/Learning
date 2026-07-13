@@ -857,9 +857,7 @@ const summaries = {
   function getDomain(label) {
     return domainOf[label] || "AI Workflow";
   }
-function wrapLabel(text, maxChars = 15) {
-return text;
-}
+
  function wrapLabel(text, maxChars = 14) {
     const words = text.split(' ');
     const lines = [];
@@ -907,10 +905,10 @@ return text;
   function cssVar(name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   }
-const displayLabels = labels.map(label => wrapLabel(label));
+
 const chartData = [{
     type: 'sunburst',
-    labels: displayLabels,
+    labels: labels,
     customdata: labels,
     parents: parents,
     hovertext: labels.map(l => summaries[l] || ''),
@@ -918,7 +916,7 @@ const chartData = [{
     marker: { colors: colors, line: { width: 2, color: cssVar('--bg') } },
     insidetextorientation: 'horizontal',
     leaf: { opacity: 1 }
-  }];
+}];
 
   const chartLayout = {
     margin: { l: 0, r: 0, b: 0, t: 0 },
