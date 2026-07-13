@@ -5,6 +5,7 @@
 Knowledge Explorer renders any subject as a navigable sunburst map — click into a topic, read a plain-language summary and a real-world use case, and see exactly where it sits in the wider field. The engine knows nothing about any particular subject; all of that lives in a **Knowledge Pack**.
 
 > Status: **Sprint 1 complete** · Version `v0.2.0` · First pack: **AI**
+
 https://rishibharaj.github.io/Learning/
 ---
 
