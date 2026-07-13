@@ -689,7 +689,7 @@ body {
     </div>
   </footer>
 
-
+<script>
   // ============================================================
   // Knowledge Pack data — AI (Sprint 1 keeps the Sprint 0 dataset;
   // Sprint 2 will move this into packs/ai/pack.json)
@@ -979,18 +979,10 @@ console.log("Plotly =", typeof Plotly);
   }
 
 function zoomTo(node) {
-
     const id = ids[labels.indexOf(node)];
 
-    Plotly.animate(chartEl, {
-        data: [{
-            level: id
-        }]
-    }, {
-        transition: {
-            duration: 1000,
-            easing: 'cubic-in-out'
-        }
+    Plotly.restyle(chartEl, {
+        level: id
     });
 }
 
@@ -1115,7 +1107,7 @@ function zoomTo(node) {
     btn.addEventListener('click', () => setView(btn.dataset.view));
   });
 
-})();
+
 </script>
 </body>
 </html>
