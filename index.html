@@ -803,23 +803,7 @@ alert("START");
 function wrapLabel(text, maxChars = 15) {
 return text;
 }
-    const words = text.split(' ');
-    let lines = [];
-    let current = '';
-
-    words.forEach(word => {
-        if ((current + ' ' + word).length > maxChars) {
-            lines.push(current);
-            current = word;
-        } else {
-            current += (current ? ' ' : '') + word;
-        }
-    });
-
-    if (current) lines.push(current);
-
-    return lines.join('<br>');
-}
+      
   const colors = labels.map(l => domainColor[getDomain(l)] || "#8B96A5");
 
   // ============================================================
