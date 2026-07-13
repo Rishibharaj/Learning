@@ -801,6 +801,8 @@
     return domainOf[label] || "AI Workflow";
   }
 function wrapLabel(text, maxChars = 15) {
+return text;
+}
     const words = text.split(' ');
     let lines = [];
     let current = '';
@@ -850,7 +852,7 @@ function wrapLabel(text, maxChars = 15) {
 
   const chartData = [{
     type: 'sunburst',
-    labels: labels,
+    labels: labels.map(label => wrapLabel(label)),
     parents: parents,
     hovertext: labels.map(l => summaries[l] || ''),
     hoverinfo: 'text',
