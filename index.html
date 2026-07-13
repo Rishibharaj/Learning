@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Explorer — AI Knowledge Pack</title>
+<meta name="description" content="Knowledge Explorer is an interactive learning platform. Explore the AI Knowledge Pack as a navigable sunburst of concepts, from data preprocessing to deployment.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<style>
+  :root, [data-theme="dark"] {
+    --bg: #0F1419;
+    --surface: #161B22;
+    --surface-2: #1C232C;
+    --border: #2A313C;
+    --text: #E6EDF3;
+    --text-dim: #8B96A5;
+    --text-faint: #5B6472;
+    --accent: #5EEAD4;
+    --accent-2: #F0B429;
+    --danger: #F87171;
+    --radius: 10px;
+    --shadow: 0 8px 24px rgba(0,0,0,0.35);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  [data-theme="light"] {
+    --bg: #F5F6F8;
+    --surface: #FFFFFF;
+    --surface-2: #EFF1F4;
+    --border: #DCE1E7;
+    --text: #12161C;
+    --text-dim: #565F6B;
+    --text-faint: #8892A0;
+    --accent: #0C9C8C;
+    --accent-2: #B9790A;
+    --shadow: 0 8px 24px rgba(20,25,35,0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  [hidden] { display: none !important; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  a { color: var(--accent); }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  /* ---------- Topbar ---------- */
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 0 24px;
+    height: 60px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    flex-shrink: 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 17px;
+    white-space: nowrap;
+  }
+
+  .brand-mark {
+    color: var(--accent);
+    font-size: 18px;
+  }
+
+  .pack-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 2px 8px;
+    border-radius: 100px;
+  }
+
+  .main-nav {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .nav-link {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: color .15s, background .15s;
+  }
+
+  .nav-link:hover { color: var(--text); background: var(--surface-2); }
+  .nav-link.active { color: var(--bg); background: var(--accent); }
+
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .search-wrap { position: relative; }
+
+  #searchInput {
+    width: 220px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: width .2s;
+  }
+
+  #searchInput:focus { width: 260px; }
+
+  .search-results {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    width: 280px;
+    max-height: 280px;
+    overflow-y: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 6px;
+  }
+
+  .search-results.open { display: block; }
+
+  .search-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: 6px;
+  }
+
+  .search-item:hover { background: var(--surface-2); }
+
+  .search-empty {
+    padding: 10px;
+    font-size: 13px;
+    color: var(--text-faint);
+  }
+
+  #themeToggle {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #themeToggle:hover { border-color: var(--accent); }
+
+  /* ---------- Views ---------- */
+
+  .view { display: none; flex: 1; min-height: 0; }
+  .view.active { display: flex; flex-direction: column; }
+
+  /* ---------- Explore ---------- */
+
+  .explore-layout {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .chart-panel {
+    flex: 1.6;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 16px 16px 8px;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .crumb {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 5px 10px;
+    border-radius: 6px;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .crumb:hover { border-color: var(--accent); color: var(--text); }
+  .crumb.current { color: var(--bg); background: var(--accent); border-color: var(--accent); font-weight: 500; }
+
+  .crumb-arrow { color: var(--text-faint); font-size: 12px; }
+
+  #resetBtn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 12px;
+    font-family: var(--font-mono);
+    padding: 5px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  #resetBtn:hover { color: var(--text); border-color: var(--accent); }
+
+  #chart {
+    flex: 1;
+    min-height: 320px;
+  }
+
+  .chart-hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-faint);
+    padding: 4px 0 10px;
+  }
+
+  .detail-panel {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  .detail-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    min-height: 200px;
+  }
+
+  .detail-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    min-height: 160px;
+    color: var(--text-faint);
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .detail-empty-icon { font-size: 26px; opacity: .6; }
+
+  .domain-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .03em;
+    color: var(--tag-color, var(--accent));
+    border: 1px solid var(--tag-color, var(--accent));
+    padding: 3px 9px;
+    border-radius: 100px;
+    margin-bottom: 12px;
+  }
+
+  .detail-content h2 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    margin: 0 0 10px;
+  }
+
+  .detail-content p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-dim);
+    margin: 0;
+  }
+
+  .use-case {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .use-case-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--accent-2);
+    margin-bottom: 6px;
+  }
+
+  .use-case-text {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-dim);
+  }
+
+  /* ---------- About / Roadmap ---------- */
+
+  .doc-view {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    width: 100%;
+  }
+
+  .doc-view h1 {
+    font-family: var(--font-display);
+    font-size: 30px;
+    margin: 0 0 6px;
+  }
+
+  .doc-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 10px;
+  }
+
+  .doc-view p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-dim);
+  }
+
+  .doc-view h2 {
+    font-family: var(--font-display);
+    font-size: 19px;
+    margin: 36px 0 12px;
+  }
+
+  .pack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .pack-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .pack-chip .status {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 100px;
+  }
+
+  .status-live { background: rgba(94,234,212,.15); color: var(--accent); }
+  .status-next { background: rgba(240,180,41,.15); color: var(--accent-2); }
+  .status-later { background: var(--surface-2); color: var(--text-faint); }
+
+  .sprint-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+  }
+
+  .sprint-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+
+  .sprint-item.done { border-left-color: var(--accent); }
+  .sprint-item.active { border-left-color: var(--accent-2); }
+
+  .sprint-item .sprint-title {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .sprint-item .sprint-desc {
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.55;
+  }
+
+  .backlog-list {
+    columns: 2;
+    column-gap: 24px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 2;
+  }
+
+  @media (max-width: 560px) {
+    .backlog-list { columns: 1; }
+  }
+
+  /* ---------- Footer ---------- */
+
+  .site-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 14px 24px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+  }
+
+  .site-footer .version {
+    color: var(--accent);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 16px;
+  }
+
+  .footer-links button {
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 0;
+  }
+
+  .footer-links button:hover { color: var(--accent); }
+
+  /* ---------- Responsive ---------- */
+
+  @media (max-width: 860px) {
+    .topbar { flex-wrap: wrap; height: auto; padding: 10px 16px; row-gap: 8px; }
+    .main-nav { order: 3; width: 100%; }
+    #searchInput { width: 160px; }
+    #searchInput:focus { width: 180px; }
+    .explore-layout { flex-direction: column; }
+    .chart-panel { padding: 14px 14px 4px; }
+    #chart { min-height: 380px; }
+    .detail-panel { max-width: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">◆</span>
+      <span class="brand-name">Knowledge Explorer</span>
+      <span class="pack-badge">AI PACK</span>
+    </div>
+    <nav class="main-nav">
+      <button class="nav-link active" data-view="explore">Explore</button>
+      <button class="nav-link" data-view="about">About</button>
+      <button class="nav-link" data-view="roadmap">Roadmap</button>
+    </nav>
+    <div class="topbar-actions">
+      <div class="search-wrap">
+        <input type="search" id="searchInput" placeholder="Search topics…" aria-label="Search topics" autocomplete="off">
+        <div class="search-results" id="searchResults"></div>
+      </div>
+      <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <main id="view-explore" class="view active">
+    <div class="explore-layout">
+
+      <section class="chart-panel">
+        <div class="panel-header">
+          <div class="breadcrumb" id="breadcrumb"></div>
+          <button id="resetBtn" title="Zoom out to the full map">Reset view</button>
+        </div>
+        <div id="chart"></div>
+        <div class="chart-hint">Click any segment to drill in. Click the center circle to zoom back out.</div>
+      </section>
+
+      <aside class="detail-panel">
+        <div class="detail-card" id="detailCard">
+          <div class="detail-empty" id="detailEmpty">
+            <div class="detail-empty-icon">◎</div>
+            <div>Click a topic in the map<br>to see its details here.</div>
+          </div>
+          <div class="detail-content" id="detailContent" hidden>
+            <span class="domain-tag" id="detailDomain"></span>
+            <h2 id="detailTitle"></h2>
+            <p id="detailSummary"></p>
+            <div class="use-case" id="detailUseCaseBlock" hidden>
+              <div class="use-case-label">Use case</div>
+              <div class="use-case-text" id="detailUseCase"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <main id="view-about" class="view">
+    <div class="doc-view">
+      <div class="doc-eyebrow">About</div>
+      <h1>Knowledge Explorer</h1>
+      <p>Knowledge Explorer is a domain-independent learning platform. The engine doesn't know anything about AI, PMP, or any other subject — all of that lives in a <strong>Knowledge Pack</strong>: a self-contained set of topics, relationships, summaries, and use cases that the engine renders as an explorable map.</p>
+      <p>The goal is to make dense technical subjects navigable at a glance — see how a field is structured, drill into any concept, and read a plain-language summary and real-world use case without leaving the map.</p>
+
+      <h2>Knowledge Packs</h2>
+      <div class="pack-grid">
+        <div class="pack-chip">AI <span class="status status-live">live</span></div>
+        <div class="pack-chip">PMP <span class="status status-next">next</span></div>
+        <div class="pack-chip">Cloud Computing <span class="status status-later">planned</span></div>
+        <div class="pack-chip">Python <span class="status status-later">planned</span></div>
+        <div class="pack-chip">Networking <span class="status status-later">planned</span></div>
+        <div class="pack-chip">DevOps <span class="status status-later">planned</span></div>
+        <div class="pack-chip">Data Science <span class="status status-later">planned</span></div>
+        <div class="pack-chip">Cyber Security <span class="status status-later">planned</span></div>
+        <div class="pack-chip">Enterprise Automation <span class="status status-later">planned</span></div>
+      </div>
+
+      <h2>Why it's built this way</h2>
+      <p>Adding a new subject should mean writing new data, not new code. Every sprint moves the project closer to that: this release polishes the experience on top of the original AI prototype; a later sprint separates the engine from the data entirely so new packs can be dropped in.</p>
+
+      <h2>Built by</h2>
+      <p>An operations and AI practitioner exploring applied AI, workflow automation, and enterprise-grade product design — built as an open-source portfolio piece and a genuine learning tool.</p>
+    </div>
+  </main>
+
+  <main id="view-roadmap" class="view">
+    <div class="doc-view">
+      <div class="doc-eyebrow">Roadmap</div>
+      <h1>Where this is headed</h1>
+      <p>Knowledge Explorer moves in small, working sprints. Each one ships real software; nothing is “in progress” for long.</p>
+
+      <h2>Sprints</h2>
+      <div class="sprint-list">
+        <div class="sprint-item done">
+          <div class="sprint-title">✔ Sprint 0 — Foundation</div>
+          <div class="sprint-desc">Product vision, architecture decisions, roadmap, documentation strategy, and repository structure defined.</div>
+        </div>
+        <div class="sprint-item active">
+          <div class="sprint-title">▸ Sprint 1 — Polished single-file prototype</div>
+          <div class="sprint-desc">Transform the raw AI sunburst prototype into a professional experience: navigation, search, theme toggle, dynamic knowledge cards, breadcrumb trail, responsive layout.</div>
+        </div>
+        <div class="sprint-item">
+          <div class="sprint-title">○ Sprint 2 — Modular architecture</div>
+          <div class="sprint-desc">Split the single file into index.html, css/, js/, assets/, packs/, and docs/. Define the Knowledge Pack data contract.</div>
+        </div>
+        <div class="sprint-item">
+          <div class="sprint-title">○ Sprint 3 — Expand the AI Knowledge Pack</div>
+          <div class="sprint-desc">Deepen coverage of the AI domain with more topics, refined summaries, and richer use cases.</div>
+        </div>
+        <div class="sprint-item">
+          <div class="sprint-title">○ Sprint 4 — PMP Knowledge Pack</div>
+          <div class="sprint-desc">Build the second Knowledge Pack with zero engine changes — proving the domain-independent architecture.</div>
+        </div>
+      </div>
+
+      <h2>Future Knowledge Packs</h2>
+      <p>Cloud Computing · Python · Networking · DevOps · Data Science · Cyber Security · Enterprise Automation</p>
+
+      <h2>Backlog — not in the current version</h2>
+      <div class="backlog-list">
+        <div>Learning Mode</div>
+        <div>Career Roadmaps</div>
+        <div>Quizzes</div>
+        <div>Flashcards</div>
+        <div>Notes</div>
+        <div>Bookmarks</div>
+        <div>User Profiles</div>
+        <div>Progress Tracking</div>
+        <div>Enterprise Case Studies</div>
+        <div>Theme preference persistence</div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div>Knowledge Explorer <span class="version">v0.2.1</span> · AI Knowledge Pack · Sprint 1</div>
+    <div class="footer-links">
+      <button data-view="about">About</button>
+      <button data-view="roadmap">Roadmap</button>
+      <span>Source-available · License TBD</span>
+    </div>
+  </footer>
+
+<script>
+(function () {
+
+  // ============================================================
+  // Knowledge Pack data — AI (Sprint 1 keeps the Sprint 0 dataset;
+  // Sprint 2 will move this into packs/ai/pack.json)
+  // ============================================================
+
+  const labels = [
+    "AI Workflow","Data Collection & Preprocessing","Data Cleaning","Normalization","Feature Engineering",
+    "One-hot Encoding","Feature Selection","Model Inputs & Representations","Embeddings","Tokenization",
+    "Model Architectures & Components","Transformer","CNN","Model Training & Optimization","LoRA","Knowledge Distillation",
+    "Loss Functions","Cross-Entropy","MSE","Evaluation Metrics","BLEU","ROUGE","Model Compression & Deployment",
+    "Quantization","Pruning","Inference & Serving","Batch Inference","Real-time Inference","Monitoring & Feedback Loops",
+    "Model Drift","Retraining","Explainability & Interpretability","SHAP","LIME","Ethics & Fairness","Bias Detection",
+    "Fairness Metrics","Security & Robustness","Adversarial Training","Model Hardening","Learning Paradigms",
+    "Supervised Learning","Unsupervised Learning","Reinforcement Learning","Self-supervised Learning","Federated Learning"
+  ];
+
+  const parents = [
+    "",
+    "AI Workflow","Data Collection & Preprocessing","Data Collection & Preprocessing","AI Workflow",
+    "Feature Engineering","Feature Engineering","AI Workflow","Model Inputs & Representations","Model Inputs & Representations",
+    "AI Workflow","Model Architectures & Components","Model Architectures & Components","AI Workflow","Model Training & Optimization","Model Training & Optimization",
+    "AI Workflow","Loss Functions","Loss Functions","AI Workflow","Evaluation Metrics","Evaluation Metrics","AI Workflow",
+    "Model Compression & Deployment","Model Compression & Deployment","AI Workflow","Inference & Serving","Inference & Serving","AI Workflow",
+    "Monitoring & Feedback Loops","Monitoring & Feedback Loops","AI Workflow","Explainability & Interpretability","Explainability & Interpretability","AI Workflow",
+    "Ethics & Fairness","Ethics & Fairness","AI Workflow","Security & Robustness","Security & Robustness","AI Workflow",
+    "Learning Paradigms","Learning Paradigms","Learning Paradigms","Learning Paradigms","Learning Paradigms"
+  ];
+
+  const summaries = {
+    "AI Workflow": "End-to-end process of building, evaluating, and deploying AI systems.<br><b>Use Case:</b> Designing intelligent applications across industries.",
+    "Data Collection & Preprocessing": "Gather and clean raw data for model input.<br><b>Use Case:</b> Web scraping, sensor data aggregation, ETL pipelines.",
+    "Data Cleaning": "Remove noise and inconsistencies.<br><b>Use Case:</b> Fix missing values in customer databases.",
+    "Normalization": "Scale features to a uniform range.<br><b>Use Case:</b> Prepare image pixel values for CNNs.",
+    "Feature Engineering": "Create meaningful features from raw data.<br><b>Use Case:</b> Extract time-based features for forecasting models.",
+    "One-hot Encoding": "Convert categories to binary vectors.<br><b>Use Case:</b> Encode product categories for recommendation systems.",
+    "Feature Selection": "Choose the most relevant features.<br><b>Use Case:</b> Improve model accuracy by removing noise.",
+    "Model Inputs & Representations": "Encode data for model consumption.<br><b>Use Case:</b> Use embeddings for semantic search.",
+    "Embeddings": "Dense vector representation of data.<br><b>Use Case:</b> Word embeddings in NLP tasks.",
+    "Tokenization": "Split text into tokens.<br><b>Use Case:</b> Prepare input for transformer models.",
+    "Model Architectures & Components": "Design of neural network structures.<br><b>Use Case:</b> Choose CNNs for image classification.",
+    "Transformer": "Attention-based architecture.<br><b>Use Case:</b> Used in GPT and BERT models.",
+    "CNN": "Convolutional layers for spatial data.<br><b>Use Case:</b> Image recognition and object detection.",
+    "Model Training & Optimization": "Improve how a model learns and performs.<br><b>Use Case:</b> Fine-tune LLMs with LoRA.",
+    "LoRA": "Low-rank adaptation for efficient fine-tuning.<br><b>Use Case:</b> Adapt GPT models to specific domains.",
+    "Knowledge Distillation": "Train small models from large ones.<br><b>Use Case:</b> Deploy lightweight models on mobile devices.",
+    "Loss Functions": "Guide model learning via error minimization.<br><b>Use Case:</b> Use cross-entropy for classification tasks.",
+    "Cross-Entropy": "Measures prediction error for classification.<br><b>Use Case:</b> Used in image and text classifiers.",
+    "MSE": "Mean squared error for regression.<br><b>Use Case:</b> Predict housing prices.",
+    "Evaluation Metrics": "Assess model performance.<br><b>Use Case:</b> Use BLEU for translation quality.",
+    "BLEU": "Evaluates translation via n-gram overlap.<br><b>Use Case:</b> Compare machine vs human translations.",
+    "ROUGE": "Measures summarization quality.<br><b>Use Case:</b> Evaluate generated summaries.",
+    "Model Compression & Deployment": "Optimize models for real-world use.<br><b>Use Case:</b> Deploy quantized models on edge devices.",
+    "Quantization": "Reduce model size via lower precision.<br><b>Use Case:</b> Speed up inference on mobile devices.",
+    "Pruning": "Remove unnecessary weights.<br><b>Use Case:</b> Compress deep neural networks.",
+    "Inference & Serving": "Run models in production.<br><b>Use Case:</b> Serve predictions via REST APIs.",
+    "Batch Inference": "Process multiple inputs together.<br><b>Use Case:</b> Predict outcomes for large datasets.",
+    "Real-time Inference": "Instant predictions on live data.<br><b>Use Case:</b> Chatbots and fraud detection.",
+    "Monitoring & Feedback Loops": "Track and improve deployed models.<br><b>Use Case:</b> Detect model drift and retrain.",
+    "Model Drift": "Change in data distribution over time.<br><b>Use Case:</b> Monitor accuracy in production.",
+    "Retraining": "Update models with new data.<br><b>Use Case:</b> Improve performance with fresh inputs.",
+    "Explainability & Interpretability": "Understand model decisions.<br><b>Use Case:</b> Use SHAP to explain predictions.",
+    "SHAP": "Feature contribution analysis.<br><b>Use Case:</b> Explain credit scoring models.",
+    "LIME": "Local interpretable model explanations.<br><b>Use Case:</b> Visualize decision boundaries.",
+    "Ethics & Fairness": "Ensure responsible AI use.<br><b>Use Case:</b> Audit models for bias.",
+    "Bias Detection": "Identify unfair model behavior.<br><b>Use Case:</b> Check hiring algorithms for discrimination.",
+    "Fairness Metrics": "Quantify equity in predictions.<br><b>Use Case:</b> Ensure equal opportunity in lending.",
+    "Security & Robustness": "Protect models from attacks.<br><b>Use Case:</b> Defend against adversarial inputs.",
+    "Adversarial Training": "Train with perturbed data.<br><b>Use Case:</b> Improve robustness in image classifiers.",
+    "Model Hardening": "Strengthen models against threats.<br><b>Use Case:</b> Secure AI in autonomous vehicles.",
+    "Learning Paradigms": "Different approaches to model learning.<br><b>Use Case:</b> Choose a paradigm based on data availability.",
+    "Supervised Learning": "Learn from labeled data.<br><b>Use Case:</b> Spam detection in emails.",
+    "Unsupervised Learning": "Discover patterns in unlabeled data.<br><b>Use Case:</b> Customer segmentation.",
+    "Reinforcement Learning": "Learn via rewards and penalties.<br><b>Use Case:</b> Train agents in games and robotics.",
+    "Self-supervised Learning": "Learn from the structure of the data itself.<br><b>Use Case:</b> Pretrain language models like BERT.",
+    "Federated Learning": "Train across decentralized data.<br><b>Use Case:</b> Collaborative learning across hospitals."
+  };
+
+  const domainColor = {
+    "AI Workflow": "#F0B429",
+    "Data Collection & Preprocessing": "#FB923C",
+    "Feature Engineering": "#F97316",
+    "Model Inputs & Representations": "#38BDF8",
+    "Model Architectures & Components": "#6366F1",
+    "Model Training & Optimization": "#34D399",
+    "Loss Functions": "#10B981",
+    "Evaluation Metrics": "#3B82F6",
+    "Model Compression & Deployment": "#A78BFA",
+    "Inference & Serving": "#EC4899",
+    "Monitoring & Feedback Loops": "#FBBF24",
+    "Explainability & Interpretability": "#94A3B8",
+    "Ethics & Fairness": "#F87171",
+    "Security & Robustness": "#0EA5E9",
+    "Learning Paradigms": "#5EEAD4"
+  };
+
+  const domainOf = {};
+  Object.keys(domainColor).forEach(d => domainOf[d] = d);
+  const domainChildren = {
+    "Data Collection & Preprocessing": ["Data Cleaning","Normalization"],
+    "Feature Engineering": ["One-hot Encoding","Feature Selection"],
+    "Model Inputs & Representations": ["Embeddings","Tokenization"],
+    "Model Architectures & Components": ["Transformer","CNN"],
+    "Model Training & Optimization": ["LoRA","Knowledge Distillation"],
+    "Loss Functions": ["Cross-Entropy","MSE"],
+    "Evaluation Metrics": ["BLEU","ROUGE"],
+    "Model Compression & Deployment": ["Quantization","Pruning"],
+    "Inference & Serving": ["Batch Inference","Real-time Inference"],
+    "Monitoring & Feedback Loops": ["Model Drift","Retraining"],
+    "Explainability & Interpretability": ["SHAP","LIME"],
+    "Ethics & Fairness": ["Bias Detection","Fairness Metrics"],
+    "Security & Robustness": ["Adversarial Training","Model Hardening"],
+    "Learning Paradigms": ["Supervised Learning","Unsupervised Learning","Reinforcement Learning","Self-supervised Learning","Federated Learning"]
+  };
+  Object.entries(domainChildren).forEach(([domain, children]) => {
+    children.forEach(c => domainOf[c] = domain);
+  });
+
+  function getDomain(label) {
+    return domainOf[label] || "AI Workflow";
+  }
+
+  const colors = labels.map(l => domainColor[getDomain(l)] || "#8B96A5");
+
+  // ============================================================
+  // DOM references
+  // ============================================================
+
+  const chartEl = document.getElementById('chart');
+  const breadcrumbEl = document.getElementById('breadcrumb');
+  const resetBtn = document.getElementById('resetBtn');
+
+  const detailEmpty = document.getElementById('detailEmpty');
+  const detailContent = document.getElementById('detailContent');
+  const detailDomain = document.getElementById('detailDomain');
+  const detailTitle = document.getElementById('detailTitle');
+  const detailSummary = document.getElementById('detailSummary');
+  const detailUseCaseBlock = document.getElementById('detailUseCaseBlock');
+  const detailUseCase = document.getElementById('detailUseCase');
+
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  const themeToggle = document.getElementById('themeToggle');
+
+  // ============================================================
+  // Chart
+  // ============================================================
+
+  function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  const chartData = [{
+    type: 'sunburst',
+    labels: labels,
+    parents: parents,
+    hovertext: labels.map(l => summaries[l] || ''),
+    hoverinfo: 'text',
+    marker: { colors: colors, line: { width: 2, color: cssVar('--bg') } },
+    insidetextorientation: 'radial',
+    leaf: { opacity: 1 }
+  }];
+
+  const chartLayout = {
+    margin: { l: 0, r: 0, b: 0, t: 0 },
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    font: { family: 'Inter, sans-serif', color: cssVar('--text-dim'), size: 12 },
+    uniformtext: { minsize: 8, mode: 'show' }
+  };
+
+  Plotly.newPlot(chartEl, chartData, chartLayout, { responsive: true, displaylogo: false });
+
+  // ============================================================
+  // Detail card
+  // ============================================================
+
+  function renderDetail(label) {
+    const domain = getDomain(label);
+    const color = domainColor[domain] || cssVar('--accent');
+    const raw = summaries[label] || 'No details are available for this topic yet.';
+    const [description, useCase] = raw.split(/<br>\s*<b>Use Case:<\/b>\s*/i);
+
+    detailEmpty.hidden = true;
+    detailContent.hidden = false;
+
+    detailDomain.textContent = domain;
+    detailDomain.style.setProperty('--tag-color', color);
+    detailTitle.textContent = label;
+    detailSummary.textContent = description;
+
+    if (useCase) {
+      detailUseCase.textContent = useCase;
+      detailUseCaseBlock.hidden = false;
+    } else {
+      detailUseCaseBlock.hidden = true;
+    }
+  }
+
+  function clearDetail() {
+    detailContent.hidden = true;
+    detailEmpty.hidden = false;
+  }
+
+  // ============================================================
+  // Breadcrumb
+  // ============================================================
+
+  function getAncestors(label) {
+    const chain = [];
+    let current = label;
+    while (current !== undefined && current !== '') {
+      chain.unshift(current);
+      const idx = labels.indexOf(current);
+      current = idx >= 0 ? parents[idx] : '';
+    }
+    return chain;
+  }
+
+  function zoomTo(node) {
+    Plotly.restyle(chartEl, { level: [node] }, [0]);
+  }
+
+  function renderBreadcrumb(label) {
+    const chain = getAncestors(label);
+    breadcrumbEl.innerHTML = '';
+    chain.forEach((node, i) => {
+      const isLast = i === chain.length - 1;
+      const btn = document.createElement('button');
+      btn.className = 'crumb' + (isLast ? ' current' : '');
+      btn.textContent = node;
+      btn.title = node;
+      btn.addEventListener('click', () => {
+        zoomTo(node);
+        renderDetail(node);
+        renderBreadcrumb(node);
+      });
+      breadcrumbEl.appendChild(btn);
+      if (!isLast) {
+        const arrow = document.createElement('span');
+        arrow.className = 'crumb-arrow';
+        arrow.textContent = '→';
+        breadcrumbEl.appendChild(arrow);
+      }
+    });
+  }
+
+  renderBreadcrumb(labels[0]);
+
+  // ============================================================
+  // Chart interaction
+  // ============================================================
+
+  chartEl.on('plotly_click', function (eventData) {
+    const topic = eventData.points[0].label;
+    renderDetail(topic);
+    renderBreadcrumb(topic);
+  });
+
+  resetBtn.addEventListener('click', function () {
+    zoomTo(labels[0]);
+    renderBreadcrumb(labels[0]);
+    clearDetail();
+  });
+
+  window.addEventListener('resize', function () {
+    Plotly.Plots.resize(chartEl);
+  });
+
+  // ============================================================
+  // Search
+  // ============================================================
+
+  searchInput.addEventListener('input', function (e) {
+    const q = e.target.value.trim().toLowerCase();
+    if (!q) {
+      searchResults.innerHTML = '';
+      searchResults.classList.remove('open');
+      return;
+    }
+    const matches = labels.filter(l => l.toLowerCase().includes(q)).slice(0, 8);
+    if (matches.length === 0) {
+      searchResults.innerHTML = '<div class="search-empty">No topics found</div>';
+    } else {
+      searchResults.innerHTML = matches.map(m =>
+        `<button class="search-item" data-label="${m.replace(/"/g, '&quot;')}">${m}</button>`
+      ).join('');
+    }
+    searchResults.classList.add('open');
+  });
+
+  searchResults.addEventListener('click', function (e) {
+    const btn = e.target.closest('.search-item');
+    if (!btn) return;
+    const label = btn.dataset.label;
+    const idx = labels.indexOf(label);
+    const parentLabel = idx >= 0 ? parents[idx] : '';
+    zoomTo(parentLabel || label);
+    renderDetail(label);
+    renderBreadcrumb(label);
+    searchInput.value = '';
+    searchResults.innerHTML = '';
+    searchResults.classList.remove('open');
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.search-wrap')) {
+      searchResults.classList.remove('open');
+    }
+  });
+
+  // ============================================================
+  // Theme toggle
+  // ============================================================
+
+  themeToggle.addEventListener('click', function () {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    themeToggle.textContent = next === 'dark' ? '🌙' : '☀️';
+
+    Plotly.relayout(chartEl, {
+      'font.color': cssVar('--text-dim')
+    });
+    Plotly.restyle(chartEl, { 'marker.line.color': cssVar('--bg') });
+  });
+
+  // ============================================================
+  // Nav tabs
+  // ============================================================
+
+  const navButtons = document.querySelectorAll('.nav-link, .footer-links button[data-view]');
+  const views = document.querySelectorAll('.view');
+
+  function setView(name) {
+    document.querySelectorAll('.nav-link').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+    views.forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
+    if (name === 'explore') Plotly.Plots.resize(chartEl);
+  }
+
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => setView(btn.dataset.view));
+  });
+
+})();
+</script>
+</body>
+</html>
