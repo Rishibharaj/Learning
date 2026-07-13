@@ -896,7 +896,7 @@ return text;
     labels: labels,
     parents: parents,
     hovertext: labels.map(l => summaries[l] || ''),
-    hoverinfo: 'text',
+    hoverinfo: 'skip',
     marker: { colors: colors, line: { width: 2, color: cssVar('--bg') } },
     insidetextorientation: 'radial',
     leaf: { opacity: 1 }
