@@ -6,7 +6,15 @@ Knowledge Explorer renders any subject as a navigable sunburst map — click int
 
 > Status: **Sprint 1 complete** · Version `v0.2.0` · First pack: **AI**
 
+## 🚀 Live Demo
+2
+ 
+3
 https://rishibharaj.github.io/Learning/
+4
+ 
+5
+Interactive knowledge explorer currently featuring the AI Knowledge Pack.
 ---
 
 ## Current features (Sprint 1)
