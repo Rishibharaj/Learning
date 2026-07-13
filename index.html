@@ -856,19 +856,18 @@ const summaries = {
     return domainOf[label] || "AI Workflow";
   }
 
- function wrapLabel(text, maxChars = 14) {
-    const words = text.split(' ');
-    const lines = [];
-    let current = '';
+function wrapLabel(text) {
 
-    words.forEach(word => {
-        if ((current + ' ' + word).trim().length > maxChars) {
-            if (current) lines.push(current);
-            current = word;
-        } else {
-            current += (current ? ' ' : '') + word;
-        }
-    });
+    if (text.includes(" & ")) {
+        return text.replace(" & ", "\n& ");
+    }
+
+    if (text.includes(" and ")) {
+        return text.replace(" and ", "\nand ");
+    }
+
+    return text;
+}
 
     if (current) lines.push(current);
 
@@ -876,7 +875,7 @@ const summaries = {
 }     
   const colors = labels.map(l => domainColor[getDomain(l)] || "#8B96A5");
   const displayLabels = labels.map(wrapLabel);
-
+console.log(displayLabels[10]); 
 const parentIds = parents.map(parent => {
     if (parent === "") return "";
     return ids[labels.indexOf(parent)];
