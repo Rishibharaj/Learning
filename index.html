@@ -707,7 +707,7 @@ alert("START");
     "Fairness Metrics","Security & Robustness","Adversarial Training","Model Hardening","Learning Paradigms",
     "Supervised Learning","Unsupervised Learning","Reinforcement Learning","Self-supervised Learning","Federated Learning"
   ];
-
+const ids = labels.map((_, i) => "n" + i);
   const parents = [
     "",
     "AI Workflow","Data Collection & Preprocessing","Data Collection & Preprocessing","AI Workflow",
@@ -877,6 +877,12 @@ const summaries = {
     return lines.join('<br/>');
 }     
   const colors = labels.map(l => domainColor[getDomain(l)] || "#8B96A5");
+  const displayLabels = labels.map(wrapLabel);
+
+const parentIds = parents.map(parent => {
+    if (parent === "") return "";
+    return ids[labels.indexOf(parent)];
+});
 
   // ============================================================
   // DOM references
@@ -908,13 +914,14 @@ const summaries = {
 
 const chartData = [{
     type: 'sunburst',
-    labels: labels,
+    ids: ids,
+    labels: displayLabels,
     customdata: labels,
-    parents: parents,
+    parents: parentIds,
     hovertext: labels.map(l => summaries[l] || ''),
     hoverinfo: 'skip',
     marker: { colors: colors, line: { width: 2, color: cssVar('--bg') } },
-    insidetextorientation: 'radial',
+    insidetextorientation: 'auto',
     leaf: { opacity: 1 }
 }];
 
@@ -974,18 +981,19 @@ console.log("Plotly =", typeof Plotly);
   }
 
 function zoomTo(node) {
-    Plotly.animate(
-        chartEl,
-        {
-            data: [{ level: node }]
-        },
-        {
-            transition: {
-                duration: 1000,
-                easing: 'cubic-in-out'
-            }
+
+    const id = ids[labels.indexOf(node)];
+
+    Plotly.animate(chartEl, {
+        data: [{
+            level: id
+        }]
+    }, {
+        transition: {
+            duration: 1000,
+            easing: 'cubic-in-out'
         }
-    );
+    });
 }
 
   function renderBreadcrumb(label) {
