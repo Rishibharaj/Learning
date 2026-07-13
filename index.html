@@ -720,54 +720,99 @@ alert("START");
     "Learning Paradigms","Learning Paradigms","Learning Paradigms","Learning Paradigms","Learning Paradigms"
   ];
 
-  const summaries = {
-    "AI Workflow": "End-to-end process of building, evaluating, and deploying AI systems.<br><b>Use Case:</b> Designing intelligent applications across industries.",
-    "Data Collection & Preprocessing": "Gather and clean raw data for model input.<br><b>Use Case:</b> Web scraping, sensor data aggregation, ETL pipelines.",
-    "Data Cleaning": "Remove noise and inconsistencies.<br><b>Use Case:</b> Fix missing values in customer databases.",
-    "Normalization": "Scale features to a uniform range.<br><b>Use Case:</b> Prepare image pixel values for CNNs.",
-    "Feature Engineering": "Create meaningful features from raw data.<br><b>Use Case:</b> Extract time-based features for forecasting models.",
-    "One-hot Encoding": "Convert categories to binary vectors.<br><b>Use Case:</b> Encode product categories for recommendation systems.",
-    "Feature Selection": "Choose the most relevant features.<br><b>Use Case:</b> Improve model accuracy by removing noise.",
-    "Model Inputs & Representations": "Encode data for model consumption.<br><b>Use Case:</b> Use embeddings for semantic search.",
-    "Embeddings": "Dense vector representation of data.<br><b>Use Case:</b> Word embeddings in NLP tasks.",
-    "Tokenization": "Split text into tokens.<br><b>Use Case:</b> Prepare input for transformer models.",
-    "Model Architectures & Components": "Design of neural network structures.<br><b>Use Case:</b> Choose CNNs for image classification.",
-    "Transformer": "Attention-based architecture.<br><b>Use Case:</b> Used in GPT and BERT models.",
-    "CNN": "Convolutional layers for spatial data.<br><b>Use Case:</b> Image recognition and object detection.",
-    "Model Training & Optimization": "Improve how a model learns and performs.<br><b>Use Case:</b> Fine-tune LLMs with LoRA.",
-    "LoRA": "Low-rank adaptation for efficient fine-tuning.<br><b>Use Case:</b> Adapt GPT models to specific domains.",
-    "Knowledge Distillation": "Train small models from large ones.<br><b>Use Case:</b> Deploy lightweight models on mobile devices.",
-    "Loss Functions": "Guide model learning via error minimization.<br><b>Use Case:</b> Use cross-entropy for classification tasks.",
-    "Cross-Entropy": "Measures prediction error for classification.<br><b>Use Case:</b> Used in image and text classifiers.",
-    "MSE": "Mean squared error for regression.<br><b>Use Case:</b> Predict housing prices.",
-    "Evaluation Metrics": "Assess model performance.<br><b>Use Case:</b> Use BLEU for translation quality.",
-    "BLEU": "Evaluates translation via n-gram overlap.<br><b>Use Case:</b> Compare machine vs human translations.",
-    "ROUGE": "Measures summarization quality.<br><b>Use Case:</b> Evaluate generated summaries.",
-    "Model Compression & Deployment": "Optimize models for real-world use.<br><b>Use Case:</b> Deploy quantized models on edge devices.",
-    "Quantization": "Reduce model size via lower precision.<br><b>Use Case:</b> Speed up inference on mobile devices.",
-    "Pruning": "Remove unnecessary weights.<br><b>Use Case:</b> Compress deep neural networks.",
-    "Inference & Serving": "Run models in production.<br><b>Use Case:</b> Serve predictions via REST APIs.",
-    "Batch Inference": "Process multiple inputs together.<br><b>Use Case:</b> Predict outcomes for large datasets.",
-    "Real-time Inference": "Instant predictions on live data.<br><b>Use Case:</b> Chatbots and fraud detection.",
-    "Monitoring & Feedback Loops": "Track and improve deployed models.<br><b>Use Case:</b> Detect model drift and retrain.",
-    "Model Drift": "Change in data distribution over time.<br><b>Use Case:</b> Monitor accuracy in production.",
-    "Retraining": "Update models with new data.<br><b>Use Case:</b> Improve performance with fresh inputs.",
-    "Explainability & Interpretability": "Understand model decisions.<br><b>Use Case:</b> Use SHAP to explain predictions.",
-    "SHAP": "Feature contribution analysis.<br><b>Use Case:</b> Explain credit scoring models.",
-    "LIME": "Local interpretable model explanations.<br><b>Use Case:</b> Visualize decision boundaries.",
-    "Ethics & Fairness": "Ensure responsible AI use.<br><b>Use Case:</b> Audit models for bias.",
-    "Bias Detection": "Identify unfair model behavior.<br><b>Use Case:</b> Check hiring algorithms for discrimination.",
-    "Fairness Metrics": "Quantify equity in predictions.<br><b>Use Case:</b> Ensure equal opportunity in lending.",
-    "Security & Robustness": "Protect models from attacks.<br><b>Use Case:</b> Defend against adversarial inputs.",
-    "Adversarial Training": "Train with perturbed data.<br><b>Use Case:</b> Improve robustness in image classifiers.",
-    "Model Hardening": "Strengthen models against threats.<br><b>Use Case:</b> Secure AI in autonomous vehicles.",
-    "Learning Paradigms": "Different approaches to model learning.<br><b>Use Case:</b> Choose a paradigm based on data availability.",
-    "Supervised Learning": "Learn from labeled data.<br><b>Use Case:</b> Spam detection in emails.",
-    "Unsupervised Learning": "Discover patterns in unlabeled data.<br><b>Use Case:</b> Customer segmentation.",
-    "Reinforcement Learning": "Learn via rewards and penalties.<br><b>Use Case:</b> Train agents in games and robotics.",
-    "Self-supervised Learning": "Learn from the structure of the data itself.<br><b>Use Case:</b> Pretrain language models like BERT.",
-    "Federated Learning": "Train across decentralized data.<br><b>Use Case:</b> Collaborative learning across hospitals."
-  };
+const summaries = {
+  "AI Workflow": "AI workflow is the end-to-end process of collecting data, building models, evaluating outcomes, and deploying solutions. It provides a structured framework that ensures AI systems are reliable, scalable, and aligned with business goals.<br><b>Use Case:</b> Designing intelligent applications across industries.",
+
+  "Data Collection & Preprocessing": "Data collection and preprocessing gather, organize, and prepare raw information before it reaches a model. High-quality preparation improves model accuracy and prevents errors caused by incomplete or inconsistent data.<br><b>Use Case:</b> Web scraping, sensor data aggregation, ETL pipelines.",
+
+  "Data Cleaning": "Data cleaning identifies and corrects missing, duplicate, or inaccurate records within a dataset. Clean data improves model reliability and reduces the risk of misleading results.<br><b>Use Case:</b> Fix missing values in customer databases.",
+
+  "Normalization": "Normalization scales numerical values into a consistent range for model processing. It helps algorithms learn more effectively by preventing features with larger values from dominating others.<br><b>Use Case:</b> Prepare image pixel values for CNNs.",
+
+  "Feature Engineering": "Feature engineering transforms raw data into meaningful variables that better represent the underlying problem. Well-designed features often improve model performance more than algorithm changes.<br><b>Use Case:</b> Extract time-based features for forecasting models.",
+
+  "One-hot Encoding": "One-hot encoding converts categorical values into binary vectors that machines can process. It allows algorithms to use category-based information without assuming false numerical relationships.<br><b>Use Case:</b> Encode product categories for recommendation systems.",
+
+  "Feature Selection": "Feature selection identifies the most useful variables for model training while removing irrelevant information. It improves efficiency, reduces overfitting, and enhances interpretability.<br><b>Use Case:</b> Improve model accuracy by removing noise.",
+
+  "Model Inputs & Representations": "Model representations convert raw information into formats that machine learning systems can understand. Effective representations capture important patterns and improve learning performance.<br><b>Use Case:</b> Use embeddings for semantic search.",
+
+  "Embeddings": "Embeddings represent data as dense numerical vectors that capture relationships and meaning. They enable models to compare concepts based on similarity rather than exact matches.<br><b>Use Case:</b> Word embeddings in NLP tasks.",
+
+  "Tokenization": "Tokenization splits text into smaller units such as words, subwords, or characters. It is a foundational step that allows language models to process and learn from text.<br><b>Use Case:</b> Prepare input for transformer models.",
+
+  "Model Architectures & Components": "Model architectures define how neural networks are structured and how information flows through them. Architecture choices significantly influence performance, efficiency, and capability.<br><b>Use Case:</b> Choose CNNs for image classification.",
+
+  "Transformer": "Transformers are neural network architectures that use attention mechanisms to understand relationships across data. They power most modern language models because they scale efficiently and capture context effectively.<br><b>Use Case:</b> Used in GPT and BERT models.",
+
+  "CNN": "Convolutional Neural Networks process spatial information by detecting patterns within images and visual data. They excel at recognizing features such as shapes, textures, and objects.<br><b>Use Case:</b> Image recognition and object detection.",
+
+  "Model Training & Optimization": "Model training and optimization adjust parameters to improve predictive performance. Effective optimization helps models learn faster, generalize better, and achieve higher accuracy.<br><b>Use Case:</b> Fine-tune LLMs with LoRA.",
+
+  "LoRA": "LoRA is a parameter-efficient technique that adapts large models using a small number of trainable weights. It reduces computational cost while maintaining strong performance.<br><b>Use Case:</b> Adapt GPT models to specific domains.",
+
+  "Knowledge Distillation": "Knowledge distillation transfers insights from a large model into a smaller model. It enables efficient deployment while preserving much of the original model's capability.<br><b>Use Case:</b> Deploy lightweight models on mobile devices.",
+
+  "Loss Functions": "Loss functions measure the difference between predictions and expected outcomes during training. They guide model learning by defining what success and failure look like.<br><b>Use Case:</b> Use cross-entropy for classification tasks.",
+
+  "Cross-Entropy": "Cross-entropy measures prediction error in classification problems by comparing probabilities to actual outcomes. It is widely used because it provides strong learning signals for models.<br><b>Use Case:</b> Used in image and text classifiers.",
+
+  "MSE": "Mean Squared Error calculates the average squared difference between predictions and actual values. It is commonly used for regression problems because it heavily penalizes larger errors.<br><b>Use Case:</b> Predict housing prices.",
+
+  "Evaluation Metrics": "Evaluation metrics quantify how well an AI model performs against defined objectives. They help teams compare models and make informed deployment decisions.<br><b>Use Case:</b> Use BLEU for translation quality.",
+
+  "BLEU": "BLEU evaluates machine translation by measuring overlap between generated and reference text. It provides a standardized way to compare translation quality across models.<br><b>Use Case:</b> Compare machine vs human translations.",
+
+  "ROUGE": "ROUGE measures how closely generated summaries match reference summaries. It is widely used to evaluate summarization systems and text generation quality.<br><b>Use Case:</b> Evaluate generated summaries.",
+
+  "Model Compression & Deployment": "Model compression reduces computational requirements while deployment makes models accessible in production environments. Together they improve scalability, speed, and operational efficiency.<br><b>Use Case:</b> Deploy quantized models on edge devices.",
+
+  "Quantization": "Quantization reduces model size by lowering the precision of numerical calculations. It improves speed and efficiency while minimizing impact on performance.<br><b>Use Case:</b> Speed up inference on mobile devices.",
+
+  "Pruning": "Pruning removes unnecessary weights and connections from neural networks. It creates smaller, faster models while retaining most of the original accuracy.<br><b>Use Case:</b> Compress deep neural networks.",
+
+  "Inference & Serving": "Inference is the process of generating predictions from trained models in production environments. Efficient serving ensures reliable, scalable, and low-latency responses.<br><b>Use Case:</b> Serve predictions via REST APIs.",
+
+  "Batch Inference": "Batch inference processes large groups of records in a single operation. It is efficient for scheduled workloads where immediate responses are not required.<br><b>Use Case:</b> Predict outcomes for large datasets.",
+
+  "Real-time Inference": "Real-time inference generates predictions instantly as new data arrives. It supports applications where immediate decisions are critical.<br><b>Use Case:</b> Chatbots and fraud detection.",
+
+  "Monitoring & Feedback Loops": "Monitoring tracks model performance and system health after deployment. Feedback loops enable continuous improvement by incorporating new observations and outcomes.<br><b>Use Case:</b> Detect model drift and retrain.",
+
+  "Model Drift": "Model drift occurs when changes in data reduce the accuracy of a deployed model over time. Detecting drift is essential for maintaining reliable performance.<br><b>Use Case:</b> Monitor accuracy in production.",
+
+  "Retraining": "Retraining updates a model using new or improved data after deployment. It helps maintain relevance as environments, behaviours, and conditions evolve.<br><b>Use Case:</b> Improve performance with fresh inputs.",
+
+  "Explainability & Interpretability": "Explainability helps users understand how AI systems arrive at decisions and predictions. It improves trust, transparency, governance, and regulatory compliance.<br><b>Use Case:</b> Use SHAP to explain predictions.",
+
+  "SHAP": "SHAP quantifies how individual features contribute to a model's prediction. It provides consistent explanations that help users understand decision drivers.<br><b>Use Case:</b> Explain credit scoring models.",
+
+  "LIME": "LIME explains individual AI predictions by approximating model behavior in a local context. It helps users understand complex models without needing full technical details.<br><b>Use Case:</b> Visualize decision boundaries.",
+
+  "Ethics & Fairness": "Ethics and fairness ensure AI systems operate responsibly and avoid harmful outcomes. They are critical for maintaining trust, accountability, and social acceptance.<br><b>Use Case:</b> Audit models for bias.",
+
+  "Bias Detection": "Bias detection identifies unfair patterns or unequal outcomes produced by AI systems. Detecting bias helps organizations create more equitable and compliant models.<br><b>Use Case:</b> Check hiring algorithms for discrimination.",
+
+  "Fairness Metrics": "Fairness metrics measure how consistently outcomes are distributed across groups. They provide objective evidence for evaluating responsible AI practices.<br><b>Use Case:</b> Ensure equal opportunity in lending.",
+
+  "Security & Robustness": "Security and robustness protect AI systems from attacks, failures, and unexpected behavior. Strong safeguards improve reliability in real-world environments.<br><b>Use Case:</b> Defend against adversarial inputs.",
+
+  "Adversarial Training": "Adversarial training exposes models to deliberately manipulated inputs during learning. It improves resilience against attacks and unexpected edge cases.<br><b>Use Case:</b> Improve robustness in image classifiers.",
+
+  "Model Hardening": "Model hardening strengthens AI systems against security threats, misuse, and operational failures. It reduces vulnerability and improves long-term reliability.<br><b>Use Case:</b> Secure AI in autonomous vehicles.",
+
+  "Learning Paradigms": "Learning paradigms define different approaches for training AI systems based on available data and objectives. Selecting the right paradigm greatly influences outcomes and performance.<br><b>Use Case:</b> Choose a paradigm based on data availability.",
+
+  "Supervised Learning": "Supervised learning trains models using labeled examples with known outcomes. It is one of the most effective approaches for prediction and classification tasks.<br><b>Use Case:</b> Spam detection in emails.",
+
+  "Unsupervised Learning": "Unsupervised learning discovers patterns and structure without labeled outcomes. It is valuable for exploration, segmentation, and anomaly detection.<br><b>Use Case:</b> Customer segmentation.",
+
+  "Reinforcement Learning": "Reinforcement learning trains agents through rewards and penalties received from interactions with an environment. It excels in decision-making and sequential optimization problems.<br><b>Use Case:</b> Train agents in games and robotics.",
+
+  "Self-supervised Learning": "Self-supervised learning creates training signals from the data itself rather than relying on manual labels. It enables large-scale learning from vast datasets at lower cost.<br><b>Use Case:</b> Pretrain language models like BERT.",
+
+  "Federated Learning": "Federated learning trains models across multiple devices or organizations without centralizing data. It improves privacy, compliance, and collaboration while keeping sensitive information local.<br><b>Use Case:</b> Collaborative learning across hospitals."
+};
 
   const domainColor = {
     "AI Workflow": "#F0B429",
