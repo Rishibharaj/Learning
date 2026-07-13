@@ -7,7 +7,7 @@
 <meta name="description" content="Knowledge Explorer is an interactive learning platform. Explore the AI Knowledge Pack as a navigable sunburst of concepts, from data preprocessing to deployment.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src=cdn.jsdelivr.net/npm/plotly.js-dist-min/plotly.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min/plotly.min.js"></script>
 
 <style>
   :root, [data-theme="dark"] {
@@ -852,7 +852,7 @@ return text;
     font: { family: 'Inter, sans-serif', color: cssVar('--text-dim'), size: 12 },
     uniformtext: { minsize: 8, mode: 'show' }
   };
-
+console.log("Plotly =", typeof Plotly);
   Plotly.newPlot(chartEl, chartData, chartLayout, { responsive: true, displaylogo: false });
 
   // ============================================================
